@@ -46,7 +46,6 @@ Aplicacion_web_fotografIA/
 │
 ├── app.py                # Aplicación Flask
 ├── requirements.txt      # Dependencias del proyecto
-├── .env.example          # Variables de entorno (ejemplo)
 ├── .gitignore
 ├── dockerfile
 ├── README.md

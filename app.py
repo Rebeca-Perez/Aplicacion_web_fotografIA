@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from groq import Groq
 from sqlalchemy import text
 
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "datos_acceso.env"))
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
