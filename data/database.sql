@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS conversacion (
+    id SERIAL PRIMARY KEY,
+    pregunta TEXT NOT NULL,
+    respuesta TEXT NOT NULL,
+    modelo VARCHAR(100) NOT NULL,
+    fecha TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

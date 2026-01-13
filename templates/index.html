@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Fotografía LLM</title>
+    <script src="https://cdn.lovable.ai/lovable.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: url('https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?auto=format&fit=crop&w=1400&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        #container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            height: calc(100vh - 80px);
+        }
+
+        /* CHAT PANEL */
+        #chat-panel {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: hidden;
+        }
+
+        #chat {
+            flex: 1;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            margin: 8px 0;
+            max-width: 80%;
+            word-wrap: break-word;
+            padding: 8px 12px;
+            border-radius: 15px;
+            white-space: pre-wrap; /* soporta saltos de línea */
+        }
+
+        .user {
+            justify-content: flex-end;
+            background-color: #d0e7ff;
+            color: #003366;
+            margin-left: auto;
+        }
+
+        .assistant {
+            justify-content: flex-start;
+            background-color: #d4ffd4;
+            color: #006600;
+            margin-right: auto;
+        }
+
+        .icon {
+            margin-right: 8px;
+        }
+
+        #chat-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #pregunta {
+            flex: 1;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        #chat-form button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: none;
+            background-color: #007acc;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #chat-form button:hover {
+            background-color: #005fa3;
+        }
+
+        /* HISTORIAL PANEL */
+        #historial-panel {
+            flex: 1;
+            background-color: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        #historial li {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-left: 4px solid #007acc;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .detalle {
+            display: none;
+            padding-top: 4px;
+            font-size: 0.9rem;
+            color: #333;
+            white-space: pre-wrap; /* saltos de línea en respuesta */
+        }
+    </style>
+</head>
+<body>
+    <h1><i class="fas fa-camera"></i> Chat Fotografía LLM</h1>
+
+    <div id="container">
+        <!-- Panel Chat -->
+        <div id="chat-panel">
+            <div id="chat"></div>
+            <form id="chat-form">
+                <input type="text" id="pregunta" placeholder="Escribe tu pregunta..." required>
+                <button type="submit"><i class="fas fa-paper-plane"></i> Enviar</button>
+            </form>
+        </div>
+
+        <!-- Panel Historial -->
+        <div id="historial-panel">
+            <h2>Historial</h2>
+            <ul id="historial"></ul>
+        </div>
+    </div>
+
+    <script>
+        const chatEl = document.getElementById("chat");
+        const historialUl = document.getElementById("historial");
+        const form = document.getElementById("chat-form");
+
+        function addMessage(role, text) {
+            const div = document.createElement("div");
+            div.className = `message ${role}`;
+            const icon = document.createElement("i");
+            icon.className = `icon ${role === 'user' ? 'fas fa-user' : 'fas fa-robot'}`;
+            div.appendChild(icon);
+            const span = document.createElement("span");
+            span.textContent = text;
+            div.appendChild(span);
+            chatEl.appendChild(div);
+            chatEl.scrollTop = chatEl.scrollHeight;
+        }
+
+        async function updateHistorial() {
+            const res = await fetch("/historial");
+            const data = await res.json();
+            historialUl.innerHTML = "";
+
+            data.forEach(c => {
+                const li = document.createElement("li");
+                const fecha = new Date(c.fecha).toLocaleString();
+                li.textContent = `${fecha} - ${c.pregunta}`; // fecha + título de la pregunta
+
+                const detalle = document.createElement("div");
+                detalle.className = "detalle";
+                detalle.innerHTML = `<strong>Respuesta:</strong> ${c.respuesta}`;
+                
+                li.appendChild(detalle);
+                li.addEventListener("click", () => {
+                    detalle.style.display = detalle.style.display === "none" ? "block" : "none";
+                });
+
+                historialUl.appendChild(li);
+            });
+        }
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const pregunta = document.getElementById("pregunta").value;
+            addMessage("user", pregunta);
+
+            const res = await fetch("/query", {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({pregunta})
+            });
+            const data = await res.json();
+            addMessage("assistant", data.respuesta);
+
+            await updateHistorial();
+            form.reset();
+        });
+
+        updateHistorial(); // cargar historial al inicio
+    </script>
+</body>
+</html>
