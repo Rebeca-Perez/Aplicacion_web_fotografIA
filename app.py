@@ -17,11 +17,11 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY")) # Accedemos a la variable de en
 
 @app.route("/", methods = ["GET"])
 def main():
-    return render_template("index.html") # Api inicial, carga el front que está en "index.html"
+    return render_template("index.html") # Endpoint inicial, carga el front que está en "index.html"
 
 @app.route("/query", methods=["POST"])
 def query():
-    # API para preguntar al LLM
+    # Endpoint para preguntar al LLM
     data = request.get_json()
     
     """{"pregunta": "¿Cuál es la mejor cámara para fotografía astronómica?"}"""
@@ -56,7 +56,7 @@ def query():
 
     return jsonify({"respuesta": respuesta})
 
-@app.route("/historial", methods=["GET"])
+@app.route("/historial", methods=["GET"]) # Endpoint para guardar el historial
 def historial():
     # Consulta todas las conversaciones de la base de datos, ordenadas de más recientes a más antiguas
     sql = text("SELECT id, pregunta, respuesta, modelo, fecha FROM conversacion ORDER BY fecha DESC")
