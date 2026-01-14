@@ -42,24 +42,22 @@ El modelo está restringido al dominio de la fotografía, evitando desviaciones 
 
 ## 📂 Estructura del proyecto
 
-Aplicacion_web_fotografIA/  
+```
+Aplicacion_web_fotografIA/
 │
-├── app.py                # Aplicación Flask  
-├── requirements.txt      # Dependencias del proyecto  
-├── .gitignore            # Archivos con contenido sensible (.env)  
-├── dockerfile  
-├── README.md  
-│
-├── templates/  
-│   └── index.html        # Interfaz web  
-│
-├── tests/  
-│   └── test_api.py       # Tests de endpoints  
-│
-└── data/  
-    └── database.sql      # Esquema de la base de datos  
-
-
+├── app.py                # Aplicación Flask
+├── requirements.txt      # Dependencias del proyecto
+├── .gitignore            # Archivos con contenido sensible (.env)
+├── dockerfile
+├── README.md
+├── templates/
+│   └── index.html        # Interfaz web
+├── tests/
+│   └── test_api.py       # Tests de endpoints
+└── data/
+    └── database.sql      # Esquema de la base de datos
+```   
+    
 ## ⚙️ Configuración
 
 1. Clona el repositorio:  
