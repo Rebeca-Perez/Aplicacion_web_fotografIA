@@ -1,4 +1,4 @@
-# 📸 FotografIA — AI Photography Assistant
+# 📸 FotografIA — Asistente de fotografía
 
 FotografIA es una aplicación web que integra un LLM especializado en fotografía con un backend en Flask y una base de datos PostgreSQL para almacenar el historial de conversaciones.
 
@@ -27,7 +27,7 @@ El modelo está restringido al dominio de la fotografía, evitando desviaciones 
 
 - Gestión segura de credenciales mediante variables de entorno
 
-- Proyecto preparado para Docker y despliegue en la nube (AWS)
+- Proyecto preparado para Docker y despliegue en la nube (Render)
 
 ## 🛠️ Tecnologías utilizadas
 
@@ -38,26 +38,26 @@ El modelo está restringido al dominio de la fotografía, evitando desviaciones 
 - LLM API   
 - HTML / CSS / JavaScript  
 - Docker (opcional)  
-- Git & GitHub  
+- GitHub  
 
 ## 📂 Estructura del proyecto
 
-Aplicacion_web_fotografIA/
+Aplicacion_web_fotografIA/  
 │
-├── app.py                # Aplicación Flask
-├── requirements.txt      # Dependencias del proyecto
-├── .gitignore
-├── dockerfile
-├── README.md
+├── app.py                # Aplicación Flask  
+├── requirements.txt      # Dependencias del proyecto  
+├── .gitignore            # Archivos con contenido sensible (.env)  
+├── dockerfile  
+├── README.md  
 │
-├── templates/
-│   └── index.html        # Interfaz web
+├── templates/  
+│   └── index.html        # Interfaz web  
 │
-├── tests/
-│   └── test_api.py       # Tests de endpoints
+├── tests/  
+│   └── test_api.py       # Tests de endpoints  
 │
-└── data/
-    └── database.sql     # Esquema de la base de datos
+└── data/  
+    └── database.sql      # Esquema de la base de datos  
 
 
 ## ⚙️ Configuración
@@ -74,7 +74,7 @@ pip install -r requirements.txt
 3. Crea un archivo `.env` con las variables necesarias:  
 ```
 DATABASE_URL=...
-API_KEY=...
+GROQ_API_KEY=...
 ```
 
 ## ▶️ Ejecución  
@@ -97,13 +97,12 @@ Los tests de la API están definidos en:
 * tests/test_api.py
 
 Ejecutar con:  
+* pip install pytest
 * pytest
 
 ## ☁️ Despliegue
 
-El proyecto está diseñado para poder desplegarse fácilmente en:  
-* Docker  
-* AWS (EC2, ECS o Elastic Beanstalk)
+https://fotografia-llm.onrender.com
 
 Las credenciales y configuraciones sensibles se gestionan exclusivamente mediante variables de entorno.
 
